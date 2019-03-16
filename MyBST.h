@@ -2,15 +2,19 @@
 #include "iostream"
 using std::cout;
 
+
+
 struct TreeNode
 {
 	int val;
+	int height;
 	TreeNode* leftChild;
 	TreeNode* rightChild;
 
 	TreeNode(int Value)
 	{
 		val = Value;
+		height = 0;
 		leftChild = NULL;
 		rightChild = NULL;
 	}
