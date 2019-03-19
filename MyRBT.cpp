@@ -1,8 +1,14 @@
 #include "MyRBT.h"
 #include "queue"
+#include "stack"
+#include "utility"
+#include "map"
 
 using std::cout;
 using std::queue;
+using std::stack;
+using std::pair;
+using std::make_pair;
 
 
 MyRBT::MyRBT()
@@ -41,6 +47,164 @@ void MyRBT::traverse()
 		cout <<"\n";
 	}
 	cout << "root:" << root->val;
+}
+
+void MyRBT::preorder()
+{
+	if (root == NULL)
+		return;
+	stack<RBTNode*> s;
+	s.push(root);
+	while (!s.empty())
+	{
+		RBTNode* tmp = s.top();
+		s.pop();
+		if (tmp->rightChild)
+			s.push(tmp->rightChild);
+		if (tmp->leftChild)
+			s.push(tmp->leftChild);
+		cout << tmp->val << " ";
+	}
+}
+
+void MyRBT::inorder()
+{
+	if (root == NULL)
+		return;
+	stack<RBTNode*> s;
+	RBTNode* p = root;
+	while (!s.empty() || p)
+	{
+		while (p)
+		{
+			s.push(p);
+			p = p->leftChild;
+		}
+		p = s.top();
+		cout << p->val << " ";
+		s.pop();
+		if (p->rightChild)
+			p = p->rightChild;
+		else
+			p = NULL;
+	}
+}
+struct postNode
+{
+	RBTNode* node;
+	bool vis;
+	postNode(RBTNode* n) :node(n), vis(false)
+	{
+
+	}
+};
+/*
+void MyRBT::postorder()
+{
+	if (root == NULL)
+		return;
+	stack<postNode*> s;
+	s.push(new postNode(root));
+	while (!s.empty())
+	{
+		postNode *tmp = s.top();
+		if (tmp->vis)
+		{
+			s.pop();
+			cout << tmp->node->val << " ";
+			delete tmp;
+		}
+		else{
+			tmp->vis = true;
+			if (tmp->node->rightChild)
+				s.push(new postNode(tmp->node->rightChild));
+			if (tmp->node->leftChild)
+				s.push(new postNode(tmp->node->leftChild));
+		}
+	}
+}
+
+
+void MyRBT::postorder()
+{
+	if (root == NULL)
+		return;
+	stack<pair<RBTNode* , bool>> s;
+	s.push(make_pair(root , false));
+	while (!s.empty())
+	{
+		if (s.top().second)
+		{
+			cout << s.top().first->val << " ";
+			s.pop();
+		}
+		else{
+			RBTNode* tmp = s.top().first;
+			s.top().second = true;
+			if (tmp->rightChild)
+				s.push(make_pair(tmp->rightChild, false));
+			if (tmp->leftChild)
+				s.push(make_pair(tmp->leftChild, false));
+		}
+	}
+}
+
+void MyRBT::postorder()
+{
+	if (root == NULL)
+		return;
+	stack<RBTNode*> s;
+	s.push(root);
+	s.push(root);
+	RBTNode* tmp = root;
+	while (!s.empty())
+	{
+		tmp = s.top();
+		s.pop();
+		if (!s.empty() && tmp == s.top())
+		{
+			if (tmp->rightChild)
+			{
+				s.push(tmp->rightChild);
+				s.push(tmp->rightChild);
+			}
+			if (tmp->leftChild)
+			{
+				s.push(tmp->leftChild);
+				s.push(tmp->leftChild);
+			}
+		}
+		else{
+			cout << tmp->val << " ";
+		}
+		
+	}
+}
+*/
+
+void MyRBT::postorder()
+{
+	if (root == NULL)
+		return;
+	stack<RBTNode*> s;
+	s.push(root);
+	RBTNode* last = root;
+	while (!s.empty())
+	{
+		RBTNode* tmp = s.top();
+		if (last == tmp->rightChild || (tmp->rightChild == NULL && last == tmp->leftChild) || (tmp->leftChild == NULL && tmp->rightChild == NULL))
+		{
+			s.pop();
+			cout << tmp->val << " ";
+			last = tmp;
+		}
+		else{
+			if (tmp->rightChild)
+				s.push(tmp->rightChild);
+			if (tmp->leftChild)
+				s.push(tmp->leftChild);
+		}
+	}
 }
 RBTNode* MyRBT::leftRotate(RBTNode* node)
 {

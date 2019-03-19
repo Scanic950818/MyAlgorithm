@@ -25,6 +25,10 @@ public:
 	void remove(int val);
 	void insert(int val);
 	void traverse();
+
+	void preorder();
+	void inorder();
+	void postorder();
 private:
 	RBTNode* root;
 	RBTNode* search(int val, RBTNode* node);
